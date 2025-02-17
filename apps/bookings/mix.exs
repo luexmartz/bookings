@@ -39,7 +39,8 @@ defmodule Bookings.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:phoenix_pubsub, "~> 2.1"},
       {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"}
+      {:finch, "~> 0.13"},
+      {:ecto, "~> 3.10"}
     ]
   end
 
