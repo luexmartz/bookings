@@ -42,6 +42,8 @@ defmodule Bookings.MixProject do
       {:finch, "~> 0.13"},
       {:ecto, "~> 3.10"},
       {:quantum, "~> 3.0"},
+      {:flow, "~> 1.2"},
+      {:nimble_csv, "~> 1.2"}
     ]
   end
 
