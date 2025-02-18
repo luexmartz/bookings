@@ -13,14 +13,25 @@ defmodule Bookings.PlacesTest do
       assert Places.list_rooms() == [room]
     end
 
-    test "get_room!/1 returns the room with given id" do
-      room = room_fixture()
-      assert Places.get_room!(room.id) == room
-    end
-
     test "change_room/1 returns a room changeset" do
       room = room_fixture()
       assert %Ecto.Changeset{} = Places.change_room(room)
+    end
+  end
+
+  describe "places" do
+    alias Bookings.Places.Place
+
+    import Bookings.PlacesFixtures
+
+    test "list_places/0 returns all places" do
+      place = place_fixture()
+      assert Places.list_places() == [place]
+    end
+
+    test "change_place/1 returns a place changeset" do
+      place = place_fixture()
+      assert %Ecto.Changeset{} = Places.change_place(place)
     end
   end
 end

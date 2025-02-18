@@ -48,80 +48,71 @@ defmodule Bookings.Cache.RoomsETS do
     end
   end
 
-  @spec find_by_title(String.t()) :: list(Room.t())
-  def find_by_title(title), do: find_by(:title, title)
-
-  @spec find_by_city(String.t()) :: list(Room.t())
-  def find_by_city(city), do: find_by(:city, city)
-
-  defp find_by(field, query) when is_binary(query) and is_atom(field) do
-    :ets.tab2list(@table_name)
-    |> Enum.filter(fn {_id, room} ->
-      value = Map.get(room, field, "")
-
-      is_binary(value) and
-        String.contains?(value, normalize_string(query))
+  @spec filter_by_city(String.t()) :: list(Room.t())
+  def filter_by_city(city) do
+    @table_name
+    |> :ets.tab2list()
+    |> Stream.filter(fn {_id, room} ->
+      String.contains?(normalize_string(room.city), normalize_string(city))
     end)
-    |> Enum.map(fn {_id, room} -> room end)
   end
 
-  @state_aliases %{
-    "ciudad de méxico" => ["distrito federal", "cdmx"]
-  }
+  @spec filter_by_title(list(), String.t() | nil) :: list(Room.t())
+  def filter_by_title(rooms_stream, nil), do: rooms_stream
 
-  @spec find_by_state(String.t()) :: list(Room.t())
-  def find_by_state(state) do
-    normalized_state = normalize_string(state)
-
-    matching_states =
-      @state_aliases
-      |> Enum.flat_map(fn {canonical, aliases} ->
-        all_names = [canonical | aliases]
-        if Enum.any?(all_names, &String.contains?(&1, normalized_state)) do
-          all_names
-        else
-          []
-        end
-      end)
-      |> Enum.uniq()
-
-    :ets.tab2list(@table_name)
-    |> Enum.filter(fn {_id, %{state: stored_state}} ->
-      String.contains?(stored_state, normalized_state) or stored_state in matching_states
+  def filter_by_title(rooms_stream, title) do
+    rooms_stream
+    |> Stream.filter(fn {_id, room} ->
+      String.contains?(normalize_string(room.title), normalize_string(title))
     end)
-    |> Enum.map(fn {_id, room} -> room end)
   end
 
-  @spec find_by_rating_overall(String.t()) :: list(Room.t())
-  def find_by_rating_overall(rating) do
+  @spec filter_by_rating_overall(list(), String.t() | nil) :: list(Room.t())
+  def filter_by_rating_overall(rooms_stream, nil), do: rooms_stream
+
+  def filter_by_rating_overall(rooms_stream, rating) do
     rating_decimal = Decimal.new(rating)
 
-    :ets.tab2list(@table_name)
-    |> Enum.filter(fn {_id, %{rating_overall: stored_rating}} ->
+    rooms_stream
+    |> Stream.filter(fn {_id, %{rating_overall: stored_rating}} ->
       Decimal.compare(stored_rating, rating_decimal) in [:gt, :eq]
     end)
-    |> Enum.map(fn {_id, room} -> room end)
   end
 
-  @spec find_by_max_price(String.t()) :: list(Room.t())
-  def find_by_max_price(price) do
+  @spec filter_by_max_price(list(), String.t() | nil) :: list(Room.t())
+  def filter_by_max_price(rooms_stream, nil), do: rooms_stream
+
+  def filter_by_max_price(rooms_stream, price) do
     price_decimal = Decimal.new(price)
 
-    :ets.tab2list(@table_name)
-    |> Enum.filter(fn {_id, %{price_per_night: stored_price}} ->
+    rooms_stream
+    |> Stream.filter(fn {_id, %{price_per_night: stored_price}} ->
       Decimal.compare(stored_price, price_decimal) in [:lt, :eq]
     end)
-    |> Enum.map(fn {_id, room} -> room end)
   end
 
-  @spec find_by_min_price(String.t()) :: list(Room.t())
-  def find_by_min_price(price) do
+  @spec filter_by_min_price(list(), String.t() | nil) :: list(Room.t())
+  def filter_by_min_price(rooms_stream, nil), do: rooms_stream
+
+  def filter_by_min_price(rooms_stream, price) do
     price_decimal = Decimal.new(price)
 
-    :ets.tab2list(@table_name)
+    rooms_stream
     |> Enum.filter(fn {_id, %{price_per_night: stored_price}} ->
       Decimal.compare(stored_price, price_decimal) in [:gt, :eq]
     end)
-    |> Enum.map(fn {_id, room} -> room end)
+  end
+
+  @spec filter_by_amenity(list(), String.t()) :: list(Room.t())
+  def filter_by_amenity(rooms_stream, nil), do: rooms_stream
+
+  def filter_by_amenity(rooms_stream, amenity) do
+    rooms_stream
+    |> Stream.filter(fn {_id, room} ->
+      Enum.any?(
+        room.amenities,
+        &String.contains?(normalize_string(&1), normalize_string(amenity))
+      )
+    end)
   end
 end
