@@ -1,6 +1,11 @@
 defmodule Bookings.Cache.RoomsETS do
   @moduledoc """
-  A module to manage the ETS table for storing and querying room information.
+  Manages an ETS table for storing and querying room information.
+
+  This module leverages ETS (Erlang Term Storage) to provide fast in-memory lookups
+  for room data, making queries significantly more performant compared to traditional
+  database queries. It supports batch inserts, filtering by various attributes,
+  and ensures quick access to structured room information.
   """
 
   import Bookings.Utils, only: [normalize_string: 1]

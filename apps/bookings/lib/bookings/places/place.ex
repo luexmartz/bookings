@@ -1,6 +1,6 @@
 defmodule Bookings.Places.Place do
   @moduledoc """
-  The Places.Place schema.
+  The Place schema is used to validate external place data using Ecto.Changeset.
   """
 
   use Ecto.Schema

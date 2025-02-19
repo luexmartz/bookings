@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: phoenix_app
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    environment:
+      MIX_ENV: dev
+    command: ["mix", "phx.server"]

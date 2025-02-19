@@ -3,6 +3,7 @@ defmodule Bookings.Utils do
   Utility functions.
   """
 
+  @spec normalize_string(String.t()) :: String.t()
   def normalize_string(string) do
     String.downcase(string) |> String.trim()
   end

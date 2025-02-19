@@ -5,6 +5,10 @@ defmodule BookingsWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/", BookingsWeb do
+    get "/", PageController, :index
+  end
+
   scope "/api", BookingsWeb do
     pipe_through :api
 

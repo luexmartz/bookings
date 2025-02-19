@@ -10,6 +10,12 @@ defmodule Bookings.Places do
   alias Bookings.Places.Room
 
   @doc """
+  I chose Flow to process places in parallel, improving performance and scalability.
+  It enables the pipeline to distribute computations across multiple cores, allowing
+  each place to be processed independently with concurrent transformations. The
+  Flow.filter/2 step ensures efficient filtering without blocking execution, keeping
+  the system responsive as the dataset grows.
+
   Returns the list of places.
 
   ## Examples

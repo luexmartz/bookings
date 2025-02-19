@@ -1,10 +1,15 @@
 defmodule BookingsWeb.PlaceJSON do
+  @moduledoc """
+  This module is responsible for rendering places in JSON format.
+  """
+
   alias Bookings.Places.Place
   alias BookingsWeb.RoomJSON
 
   @doc """
   Renders a list of places.
   """
+  @spec index(map()) :: map()
   def index(%{places: places}) do
     %{places: for(place <- places, do: data(place))}
   end

@@ -1,6 +1,12 @@
 defmodule Bookings.HttpClient do
   @moduledoc """
-  HTTP client for requests.
+  A modular and scalable HTTP client for building requests dynamically.
+
+  This module structures HTTP requests in a composable manner, allowing
+  incremental construction of the connection, headers, and parameters.
+
+  Designed for scalability, it ensures maintainability and adaptability
+  for various API integrations.
   """
 
   require Logger
