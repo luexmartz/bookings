@@ -20,7 +20,8 @@ config :bookings, Bookings.Mailer, adapter: Swoosh.Adapters.Local
 
 config :bookings, Bookings.Scheduler,
   jobs: [
-    {"@daily", {Bookings.Workers.CSVFetcher, :fetch_csv, []}} # Runs every day at midnight
+    # Runs every day at midnight
+    {"@daily", {Bookings.Workers.CSVFetcher, :fetch_csv, []}}
   ]
 
 config :bookings_web,
