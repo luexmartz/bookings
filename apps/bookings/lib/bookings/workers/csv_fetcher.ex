@@ -1,6 +1,12 @@
 defmodule Bookings.Workers.CSVFetcher do
   @moduledoc """
-  Fetches the CSV file from the Phoenix static directory at scheduled intervals.
+  Periodically fetches the CSV dataset from an external provider and stores it in memory.
+
+  This Genserver, scheduled via Task with Quantum, ensures that the latest dataset is retrieved daily,
+  keeping the room information up to date without requiring manual intervention.
+  In case of failure, it retries up to @retry_interval times before logging the error.
+
+  Storing the data in-memory (using ETS) to improving overall performance.
   """
 
   use GenServer
@@ -86,6 +92,13 @@ defmodule Bookings.Workers.CSVFetcher do
     Process.send_after(self(), {:retry_fetch, retries}, @retry_interval)
   end
 
+  # I chose Flow to efficiently process the CSV in parallel, leveraging multiple cores
+  # to handle large datasets while maintaining performance. The partitioning strategy
+  # optimizes workload distribution, ensuring smooth transformations and filtering.
+
+  # Additionally, using ETS for storage allows ultra-fast lookups, making room queries
+  # significantly more efficient compared to database queries. This improves the
+  # overall responsiveness of the system, especially as data volume grows.
   defp process_csv(file_path) do
     _ =
       file_path

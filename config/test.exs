@@ -18,3 +18,11 @@ config :swoosh, :api_client, false
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :bookings,
+       :airbnb,
+       url: "http://localhost:4000"
+
+config :bookings,
+       :reservamos,
+       url: "https://search.reservamos.mx/api/v2"

@@ -28,6 +28,7 @@ defmodule Bookings.Adapters.Airbnb do
     end
   end
 
+  @spec get(atom()) :: {:error, map()}
   def get(_) do
     Logger.error("Unsupported request")
     {:error, %{message: "Unsupported request"}}
