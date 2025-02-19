@@ -8,6 +8,11 @@ defmodule Bookings.Adapters.Reservamos do
 
   @doc """
     Get the CSV file from the Reservamos API or any other source.
+
+    By default, the url path is /places fo https://search.reservamos.mx/api/v2
+    However, if you experience connectivity issues or need to run the service locally,
+    you can manually change the url path to /cities
+    Take a look to the config :bookings, :reservamos, url
   """
   @spec get(atom(), map()) :: {:ok, map()} | {:error, map()}
   def get(:places, params) do

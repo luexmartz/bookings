@@ -9,6 +9,7 @@
 - [Running Checks](#running-checks)
 - [Filters](#filters)
 - [Example Request](#example-request)
+- [Switching to Localhost Manually](#switching-to-localhost-manually)
 - [Prompt Documentation](#prompt-documentation)
 - [Why an Umbrella Project](#why-an-umbrella-project)
 
@@ -138,6 +139,28 @@ curl --location 'http://localhost:4000/api/places?q=monterrey&title=fundidora&mi
   ]
 }
 ```
+
+## Switching to Localhost Manually
+
+  If requests to **`https://search.reservamos.mx/api/v2`** fail due to **network issues, downtime, or API restrictions**, you can manually switch to **localhost (`http://localhost:4000/cities`)** by updating your config environment variable and using the internal `/cities` service.
+
+  #### **How to Manually Change the API URL to Localhost**
+
+  ##### 1 Modify **`config/dev.exs`**
+
+  ```elixir
+  config :bookings, :reservamos,
+  url: System.get_env("RESERVAMOS_URL", "http://localhost:4000")
+  ```
+
+  ##### 2 Modify the function **`Reservamos.get`** in `reservamos.ex`
+  ```elixir
+  :reservamos
+  |> build_conn(:get, "/cities")
+  ```
+
+  This ensures that the local API (`http://localhost:4000/cities`) is used
+
 
 ## Prompt Documentation
 
