@@ -59,3 +59,7 @@ config :phoenix, :stacktrace_depth, 20
 config :bookings,
        :airbnb,
        url: "http://localhost:4000"
+
+config :bookings,
+       :reservamos,
+       url: "https://search.reservamos.mx/api/v2"

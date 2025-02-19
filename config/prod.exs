@@ -20,3 +20,11 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+
+config :bookings,
+       :airbnb,
+       url: System.get_env("PROD_AIRBNB_URL")
+
+config :bookings,
+       :reservamos,
+       url: System.get_env("PROD_RESERVAMOS_URL")

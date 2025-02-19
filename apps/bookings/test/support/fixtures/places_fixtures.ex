@@ -30,8 +30,31 @@ defmodule Bookings.PlacesFixtures do
         url: "some url"
       })
 
-    # TODO: Insert the room into the cache
-
     room
+  end
+
+  @doc """
+  Generate a place.
+  """
+  def place_fixture(attrs \\ %{}) do
+    {:ok, place} =
+      attrs
+      |> Enum.into(%{
+        ascii_display: "some ascii_display",
+        city_ascii_name: "some city_ascii_name",
+        city_name: "some city_name",
+        city_slug: "some city_slug",
+        country: "some country",
+        display: "some display",
+        lat: "some lat",
+        long: "some long",
+        popularity: "some popularity",
+        result_type: "some result_type",
+        slug: "some slug",
+        sort_criteria: "120.5",
+        state: "some state"
+      })
+
+    place
   end
 end

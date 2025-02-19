@@ -5,6 +5,14 @@ defmodule BookingsWeb.ErrorJSON do
   See config/config.exs.
   """
 
+  def render("error.json", %{message: message}) do
+    %{errors: %{detail: message}}
+  end
+
+  def render("error.json", %{errors: errors}) when is_list(errors) do
+    %{errors: %{details: errors}}
+  end
+
   # If you want to customize a particular status code,
   # you may add your own clauses, such as:
   #

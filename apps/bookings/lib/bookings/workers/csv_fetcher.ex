@@ -64,17 +64,10 @@ defmodule Bookings.Workers.CSVFetcher do
 
   defp attempt_fetch(retries) when retries < @max_retries do
     case Airbnb.get(:csv) do
-      {:ok, %Finch.Response{status: 200, body: body}} ->
+      {:ok, data} ->
         file_path = csv_path()
-        File.write!(file_path, body)
+        File.write!(file_path, data)
         Process.send_after(self(), {:process_csv, file_path}, 1_000)
-
-      {:ok, %Finch.Response{status: status}} ->
-        Logger.warning(
-          "Failed with status #{status}, retrying in #{@retry_interval} (#{retries + 1}/#{@max_retries})..."
-        )
-
-        schedule_retry(retries + 1)
 
       {:error, reason} ->
         Logger.warning(
@@ -94,20 +87,21 @@ defmodule Bookings.Workers.CSVFetcher do
   end
 
   defp process_csv(file_path) do
-    file_path
-    |> File.stream!()
-    |> Stream.drop(1)
-    |> CSVParser.parse_stream(skip_headers: false)
-    |> Flow.from_enumerable()
-    |> Flow.partition(max_demand: 100, stages: 4)
-    |> Flow.map(&cast_row_to_changeset/1)
-    |> Flow.filter(&validate_changeset/1)
-    |> Flow.reduce(fn -> [] end, fn changeset, acc -> [normalize_room(changeset) | acc] end)
-    |> Flow.on_trigger(fn batch, _state ->
-      RoomsETS.insert_batch(batch)
-      {batch, nil}
-    end)
-    |> Enum.to_list()
+    _ =
+      file_path
+      |> File.stream!()
+      |> Stream.drop(1)
+      |> CSVParser.parse_stream(skip_headers: false)
+      |> Flow.from_enumerable()
+      |> Flow.partition(max_demand: 100, stages: 4)
+      |> Flow.map(&cast_row_to_changeset/1)
+      |> Flow.filter(&validate_changeset/1)
+      |> Flow.reduce(fn -> [] end, fn changeset, acc -> [normalize_room(changeset) | acc] end)
+      |> Flow.on_trigger(fn batch, _state ->
+        RoomsETS.insert_batch(batch)
+        {batch, nil}
+      end)
+      |> Enum.to_list()
 
     File.rm(file_path)
 
