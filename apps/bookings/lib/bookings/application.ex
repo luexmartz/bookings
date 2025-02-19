@@ -11,9 +11,11 @@ defmodule Bookings.Application do
       {DNSCluster, query: Application.get_env(:bookings, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Bookings.PubSub},
       # Start the Finch HTTP client for sending emails
-      {Finch, name: Bookings.Finch}
+      {Finch, name: Bookings.Finch},
       # Start a worker by calling: Bookings.Worker.start_link(arg)
       # {Bookings.Worker, arg}
+      Bookings.Scheduler,
+      Bookings.Workers.CSVFetcher
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Bookings.Supervisor)

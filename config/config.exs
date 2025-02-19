@@ -18,6 +18,11 @@ import Config
 # at the `config/runtime.exs`.
 config :bookings, Bookings.Mailer, adapter: Swoosh.Adapters.Local
 
+config :bookings, Bookings.Scheduler,
+  jobs: [
+    {"@daily", {Bookings.Workers.CSVFetcher, :fetch_csv, []}} # Runs every day at midnight
+  ]
+
 config :bookings_web,
   generators: [context_app: :bookings]
 

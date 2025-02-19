@@ -40,7 +40,8 @@ defmodule Bookings.MixProject do
       {:phoenix_pubsub, "~> 2.1"},
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
-      {:ecto, "~> 3.10"}
+      {:ecto, "~> 3.10"},
+      {:quantum, "~> 3.0"},
     ]
   end
 
