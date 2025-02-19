@@ -7,6 +7,7 @@ defmodule BookingsWeb.Router do
 
   scope "/", BookingsWeb do
     get "/", PageController, :index
+    get "/cities", CityController, :index
   end
 
   scope "/api", BookingsWeb do

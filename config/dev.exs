@@ -55,11 +55,11 @@ config :swoosh, :api_client, false
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
-# For testing purposes the file is available in the same project, but it could be in an external source such as an S3 Bucket
-config :bookings,
-       :airbnb,
-       url: "http://localhost:4000"
+config :bookings, :airbnb, url: System.get_env("AIRBNB_URL", "http://localhost:4000")
 
-config :bookings,
-       :reservamos,
-       url: "https://search.reservamos.mx/api/v2"
+# By default, the application is configured to use https://search.reservamos.mx/api/v2 as the API endpoint for fetching data.
+# However, if you experience connectivity issues or need to run the service locally,
+# you can manually change the default URL to http://localhost:4000
+# Take a look at the function: Reservamos.get(:places, params)
+config :bookings, :reservamos,
+  url: System.get_env("RESERVAMOS_URL", "https://search.reservamos.mx/api/v2")
