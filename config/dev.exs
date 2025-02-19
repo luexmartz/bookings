@@ -54,3 +54,8 @@ config :swoosh, :api_client, false
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+# For testing purposes the file is available in the same project, but it could be in an external source such as an S3 Bucket
+config :bookings,
+       :airbnb,
+       url: "http://localhost:4000"

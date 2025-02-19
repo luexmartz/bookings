@@ -3,6 +3,7 @@ defmodule Bookings.Places do
   The Places context.
   """
 
+  alias Bookings.Adapters.Airbnb
   alias Bookings.Places.Room
 
   @doc """
