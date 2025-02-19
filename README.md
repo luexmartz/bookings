@@ -26,7 +26,7 @@ Follow these steps to set up the local development environment:
 **Clone the repository**:
 
 ```bash
-git clone https://github.com/luexmartz/bookings
+git clone https://github.com/luexmartz/bookings.git
 cd bookings
 ```
 
