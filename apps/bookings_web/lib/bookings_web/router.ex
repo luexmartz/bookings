@@ -7,6 +7,8 @@ defmodule BookingsWeb.Router do
 
   scope "/api", BookingsWeb do
     pipe_through :api
+
+    resources "/rooms", RoomController, only: [:index, :show]
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
